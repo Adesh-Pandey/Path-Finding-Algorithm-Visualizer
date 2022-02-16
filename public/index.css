@@ -1,0 +1,221 @@
+.board {
+  display: grid;
+  width: fit-content;
+  /* margin: 3rem 0 0 3rem; */
+  margin: auto;
+  grid-template-columns: repeat(35, 1.45rem);
+  grid-template-rows: repeat(15, 1.45rem);
+  margin-top: 3rem;
+}
+.disabled {
+  background-color: red;
+}
+
+.dotdotdot {
+  width: fit-content;
+  display: flex;
+}
+
+.dot {
+  margin: 3rem 3rem 3rem 3rem;
+  padding: 20px 20px;
+  border-radius: 100%;
+}
+
+#runningMouse {
+  -webkit-transform: scaleX(-1);
+  transform: scaleX(-1);
+  width: 10rem;
+}
+
+@keyframes Blink {
+  0% {
+    background-color: white;
+  }
+  100% {
+    background-color: orangered;
+  }
+}
+@keyframes unBlink {
+  100% {
+    background-color: white;
+  }
+}
+
+.race {
+  margin-left: 100px;
+  margin-right: 100px;
+  display: flex;
+  justify-content: space-between;
+}
+
+#flag {
+  width: 10rem;
+}
+
+.block {
+  animation: blockPop 0.5s forwards;
+}
+
+@keyframes blockPop {
+  0% {
+    transform: scale(0.3);
+    background-color: rgb(12, 53, 71);
+  }
+
+  50% {
+    transform: scale(1.2);
+    background-color: rgb(12, 53, 71);
+  }
+  100% {
+    transform: scale(1);
+    background-color: rgb(12, 53, 71);
+  }
+}
+
+.path {
+  background-color: rgba(0, 190, 218, 0.75);
+  animation: pathColor 1s forwards;
+}
+
+@keyframes pathColor {
+  0% {
+    transform: scale(0.2);
+  }
+
+  75% {
+    transform: scale(1.2);
+  }
+
+  100% {
+    transform: scale(1);
+    background-color: rgba(253, 253, 0, 0.877);
+    border: none;
+  }
+}
+
+.vertices {
+  border: 1px solid rgb(175, 216, 248);
+  /* border: 1px solid rgba(212, 255, 208, 0.507); */
+  background-color: white;
+}
+@keyframes visitedAnimation {
+  0% {
+    transform: scale(0.3);
+    background-color: rgba(0, 0, 66, 0.75);
+    border-radius: 100%;
+  }
+
+  50% {
+    background-color: rgba(17, 104, 217, 0.75);
+  }
+
+  75% {
+    transform: scale(1.2);
+    background-color: rgba(0, 217, 159, 0.75);
+  }
+
+  100% {
+    transform: scale(1);
+    background-color: rgba(0, 190, 218, 0.75);
+  }
+}
+
+.SlowStep {
+  background-color: rgba(255, 255, 7, 0.397);
+  animation: visitedAnimation 1.7s 0.12s forwards;
+}
+.MediumStep {
+  background-color: rgba(255, 255, 7, 0.397);
+  animation: visitedAnimation 1.4s 0.07s forwards;
+}
+
+.FastStep {
+  background-color: rgba(255, 255, 7, 0.397);
+  animation: visitedAnimation 1s 0.06s forwards;
+}
+.instantStep {
+  background-color: rgba(0, 190, 218, 0.75);
+}
+.instantPath {
+  background-color: rgba(253, 253, 0, 0.877);
+  border: none;
+}
+.action {
+  margin-left: 40rem;
+}
+
+@keyframes sizeAlter {
+  0% {
+    transform: scale(0.3);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.final {
+  background-image: url(images/circle.svg);
+  background-repeat: no-repeat;
+  border: none;
+
+  animation: sizeAlter 0.5s forwards;
+
+  /* -webkit-user-select: none; 
+  -moz-user-select: none; 
+  -ms-user-select: none; 
+  user-select: none;
+  color: white;
+  text-align: center;
+  font-size: x-large;
+
+  border-radius: 100%;
+  border: 2px solid rgb(63, 94, 251);
+
+  background: rgb(63, 94, 251);
+  background: -moz-radial-gradient(
+    circle,
+    rgba(63, 94, 251, 1) 0%,
+    rgba(252, 70, 107, 1) 100%
+  );
+  background: -webkit-radial-gradient(
+    circle,
+    rgba(63, 94, 251, 1) 0%,
+    rgba(252, 70, 107, 1) 100%
+  );
+  background: radial-gradient(
+    circle,
+    rgba(63, 94, 251, 1) 0%,
+    rgba(252, 70, 107, 1) 100%
+  );
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#3f5efb",endColorstr="#fc466b",GradientType=1); */
+  /* background-color: green; */
+  /* transition: background 1s; */
+}
+.start {
+  background-image: url(images/startTriangle.svg);
+  background-repeat: no-repeat;
+  animation: sizeAlter 0.5s forwards;
+  border: none;
+}
+
+/* 
+0% {
+    transform: scale(0.3);
+    background-color: rgba(0, 0, 66, 0.75);
+    border-radius: 100%;
+  }
+
+  50% {
+    background-color: rgba(17, 104, 217, 0.75);
+  }
+
+  75% {
+    transform: scale(1.2);
+    background-color: rgba(0, 217, 159, 0.75);
+  }
+
+  100% {
+    transform: scale(1);
+    background-color: rgba(0, 190, 218, 0.75);
+  } */
