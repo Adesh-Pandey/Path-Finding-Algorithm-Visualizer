@@ -74,6 +74,7 @@ const Dijkstra=(vertices,start,final,walk,n,m,classOnStep,delay)=>{
             
             setTimeout(() => {
                 node.classList.remove(classOnStep)
+                
             node.classList.add(delay==0?"instantPath":"path");
         }, delay*i);
         

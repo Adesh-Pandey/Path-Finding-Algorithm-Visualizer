@@ -9,6 +9,13 @@
 
 </head>
 <body>
+    <canvas id="canvas" height="714" width="1536">
+            
+    </canvas>
+    <header class="header">
+        <div class="sound">
+            <span class="settings-audio">Audio Settings</span>
+
     <select name="audioList" id="audiolist">
         <option value="Background"> Background Sound</option>
         <option value="Running"> Running Music Sound</option>
@@ -16,46 +23,58 @@
         <option value="Brick"> Brick Sound</option>
         <option value="Special"> Special Nodes Sound</option>
     </select>
-    <input class="audioOrNot"  type="checkbox" checked/> audio</input>
-    <input class="volume" min="0" max="100" value="20" type="range" >  Volume</input>
-
+    <span><input class="audioOrNot" type="checkbox" checked=""> Audio ?</span>
+</div>
+    <span class="vol-span">
+    <span class="volume-title">Volume</span>
+    <input class="volume" min="0" max="100" value="20" type="range">
+</span>
     <select name="Algorithms" id="Algorithms"> 
 
-<option  value="Dijkstra"> Dijkstra's Algorithm</option>
-<option  value="BFS"> Breadth For Search</option>
+<option value="Dijkstra"> Dijkstra's Algorithm</option>
+<option value="BFS"> Breadth For Search</option>
+<option value="DFS"> Depth For Search</option>
 
 
     </select>
+    <div class="algo">
+        <span>Speed </span>
     <select name="Speed" id="Speed"> 
-        <option  value="Fast">Fast</option>
-        <option  value="Medium"> Medium</option>
-        <option  value="Slow"> Slow</option>
+        <option value="Fast">Fast</option>
+        <option value="Medium"> Medium</option>
+        <option value="Slow"> Slow</option>
         
             </select>
-    </div>
+        </div>
+    
 
-    <audio  autoplay loop="loop" class="background">
+    <audio autoplay="" loop="loop" class="background">
         <source src="./audio/background.mp3" type="audio/mpeg">
     </audio>
-    <audio loop="loop"  class="running">
+    <audio loop="loop" class="running">
         <source src="./audio/tumpetConcerto.mp3" type="audio/mpeg">
       
       </audio>
-      <audio  class="down">
-        <source  src="./audio/tick.mp3" type="audio/mpeg">
+      <audio class="down">
+        <source src="./audio/tick.mp3" type="audio/mpeg">
       
       </audio>
-      <audio  class="up">
+      <audio class="up">
         <source src="./audio/pop3times.mp3" type="audio/mpeg">
       
       </audio>
-      <audio  class="hit">
+      <audio class="hit">
           <source src="audio/hit.mp3" type="audio/mpeg">
       </audio>
-    
-    <div class="collection">
+      <span class="stateDefiners">
         <button class="action"> Start</button>
         <button class="action"> Reset</button>
+      </span>
+      <span class="lightDarkToggle">LIGHT</span>
+    
+    </header>
+    <div class="collection">
+        
     <table class="board">
     </table>
 
@@ -79,7 +98,7 @@
     
         <img id="flag" src="./images/pirate.gif" alt="">
     </div>
-    <script type="module" src="index.js"></script>
+    <script type="module" src="./index.js"></script>
 
     <script type="module">
         // Import the functions you need from the SDKs you need
