@@ -76,6 +76,7 @@ const Dijkstra=(vertices,start,final,walk,n,m,classOnStep,delay)=>{
                 node.classList.remove(classOnStep)
                 
             node.classList.add(delay==0?"instantPath":"path");
+            
         }, delay*i);
         
         return;
@@ -127,7 +128,7 @@ const Dijkstra=(vertices,start,final,walk,n,m,classOnStep,delay)=>{
             break;
         }
     }
-    return i;
+    return i+shortFromStart[final]+1;
 
 }
 export default Dijkstra;

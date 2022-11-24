@@ -1,37 +1,37 @@
 import Dijkstra from "./Algorithms/dijkstra'sAlgo.js"
 import BFS from "./Algorithms/Breadth-For-Search.js"
+import DFS from "./Algorithms/Deapth-For-Search.js"
 
 let backgroundSoundDetail=[true,0.07];
 let RunningSoundDetail=[true,0.7];
 let RestartSoundDetail=[true,0.2];
 let SpecialDragDetail=[true,0.5]
 let BrickDetail=[true,0.5]
-const vol=document.querySelector(".volume");
-let theme=document.querySelector(".lightDarkToggle");
-
-vol.addEventListener("change",()=>{changeVol()})
-const dict={
-    "DARK":{
-        backCol:"black",headerCol:"#0f0f0fe6",actionCol:"darkaction",boardBackcol:"black",mouseImg:"./images/invertedRunningMouse.gif"
-    },
-    "LIGHT":{
-        backCol:"white",headerCol:"#004674e6",actionCol:"action",boardBackcol:"white",mouseImg:"./images/runningMouse.gif"
-    }};
+let hoveringWall=false;
+let previous;
 
 
-const audioTick=document.querySelector(".audioOrNot");
-
-const wallSound=document.querySelector(".down");
-wallSound.volume=BrickDetail[1];
-
-const specialDrag=document.querySelector(".up");
-specialDrag.volume=SpecialDragDetail[1];
-
+let small=window.innerWidth<820?1:0;
 
 let board=document.querySelector(".board");
-let n=15;
-let m=35;
+
+let n=0
+let m=0
+if(window.innerWidth<1000){
+    n=23;
+    m=20;
+
+}else{
+    n=15
+    m=35
+
+}
+
 let Size=n*m;
+
+
+
+
 let speed;
 let classOnStep;
 let delay;
@@ -53,9 +53,57 @@ hit.volume=RestartSoundDetail[1];
 backgroundSound.volume=backgroundSoundDetail[1];
 let run=document.querySelector(".running");
 
+
+const vol=document.querySelector(".volume");
+let theme=document.querySelector(".lightDarkToggle");
+
+
+
+// let windowWidth=window.innerWidth;
+
+// if(windowWidth<920){
+//     n=24
+//     m=21
+//     Size=n*m
+//     board.style.gridTemplateColumns=`repeat(${n}, ${2.3}rem)`
+//     board.style.gridTemplateRows=`repeat(${m}, ${eachWidth}rem)`
+
+//     // document.querySelector(".header").style.width=windowWidth;
+//     // document.querySelector(".race").style.width=windowWidth;
+
+//     // document.querySelector(".smallHeader").style.display="block"
+//     // document.querySelector(".header").style.display="none"
+
+    
+// }
+
+
+
+vol.addEventListener("change",()=>{changeVol()})
+const dict={
+    "DARK":{
+        backCol:"black",headerCol:"#0f0f0fe6",actionCol:"darkaction",boardBackcol:"black",mouseImg:"./images/invertedRunningMouse.gif"
+    },
+    "LIGHT":{
+        backCol:"white",headerCol:"#004674e6",actionCol:"action",boardBackcol:"white",mouseImg:"./images/runningMouse.gif"
+    }};
+
+const overallAudio=document.querySelector(".anyAudioOrNot")
+const audioTick=document.querySelector(".audioOrNot");
+
+const wallSound=document.querySelector(".down");
+wallSound.volume=BrickDetail[1];
+
+const specialDrag=document.querySelector(".up");
+specialDrag.volume=SpecialDragDetail[1];
+
+// grid-template-columns: repeat(35, 1.65rem);
+// grid-template-rows: repeat(15, 1.65rem);
+
+
 let dots=document.querySelectorAll(".dot");
 const load=(col)=>{
-    console.log(col)
+
     for (let i = 0; i < dots.length; i++) {
         setTimeout(() => {
             dots[i].style.animation=`Blink${col} 0.3s forwards`;
@@ -99,6 +147,48 @@ SoundChanging.addEventListener("change",()=>{
             break;
     }
 })
+const audiocontrol=()=>{
+    switch (SoundChanging.value) {
+        case "Background":
+            backgroundSoundDetail[0]=audioTick.checked;
+            !backgroundSoundDetail[0]?backgroundSound.pause():isRunning?"":backgroundSound.play();
+            break;
+    
+        case "Brick":
+            BrickDetail[0]=audioTick.checked;
+            break;
+        case "Running":
+            RunningSoundDetail[0]=audioTick.checked;
+            !RunningSoundDetail[0]?run.pause():isRunning?run.play():"";
+            break;
+        case "Reset":
+            RestartSoundDetail[0]=audioTick.checked;
+            break;
+        case "Special":
+            SpecialDragDetail[0]=audioTick.checked;
+            
+            break;
+        default:
+            break;
+    }
+       
+}
+
+overallAudio.addEventListener("change",()=>{
+    if(!isRunning){
+    console.log(overallAudio.value)
+    backgroundSoundDetail[0]=overallAudio.checked
+ RunningSoundDetail[0]=overallAudio.checked
+ RestartSoundDetail[0]=overallAudio.checked
+ SpecialDragDetail[0]=overallAudio.checked
+BrickDetail[0]=overallAudio.checked
+
+audioTick.checked=overallAudio.checked
+audiocontrol();    
+}else{
+    overallAudio.checked=!overallAudio.checked
+}
+})
 
 const changeVol=()=>{
     switch (SoundChanging.value) {
@@ -129,41 +219,35 @@ const changeVol=()=>{
    
     }
 audioTick.addEventListener("change",()=>{
-    switch (SoundChanging.value) {
-        case "Background":
-            backgroundSoundDetail[0]=audioTick.checked;
-            !backgroundSoundDetail[0]?backgroundSound.pause():isRunning?"":backgroundSound.play();
-            break;
-    
-        case "Brick":
-            BrickDetail[0]=audioTick.checked;
-            break;
-        case "Running":
-            RunningSoundDetail[0]=audioTick.checked;
-            !RunningSoundDetail[0]?run.pause():isRunning?run.play():"";
-            break;
-        case "Reset":
-            RestartSoundDetail[0]=audioTick.checked;
-            break;
-        case "Special":
-            SpecialDragDetail[0]=audioTick.checked;
-            
-            break;
-        default:
-            break;
-    }
+   audiocontrol();
+//    why audio control? 
+//  since it was required in 2 places and in order to not repeate 15 lines of code
 })
 vol.value=backgroundSoundDetail[1]*100;
 run.volume=RunningSoundDetail[1];
+
+
 
 for (let index = 0; index < Size; index++) {
     
     newDiv=document.createElement("tb");
     newDiv.setAttribute("id",index);
     newDiv.setAttribute("class","vertices")
+    
     board.appendChild(newDiv);
     
 }
+
+let windowWidth=window.innerWidth;
+
+if(windowWidth>1000){
+
+    board.style.gridTemplateColumns=`repeat(${m}, ${1.6}rem)`
+    board.style.gridTemplateRows=`repeat(${n}, ${1.6}rem)`
+
+    
+}
+
 
 let vertices=document.querySelectorAll(".vertices");
 let shortFromStart=[];
@@ -184,13 +268,109 @@ const clearBoard=()=>{
         // ,classOnStep,"path","instantPath"
     }
 }
+
+// const hoverWall=document.querySelector(".hoverWall");
+// let wallHoverAlterer=false;
+// hoverWall.addEventListener("click",()=>{
+//     wallHoverAlterer=!wallHoverAlterer;
+
+//         if(wallHoverAlterer){
+//             mouseClick=true
+//             hoveringWall=true;
+//         }else{
+//             mouseClick=false;
+//             hoveringWall=false;
+
+//         }
+// })
+const dragFun=(drag,index)=>{
+    if(Number(index)==MouseCurrentlyIn)
+    return;
+
+
+ MouseCurrentlyIn=Number(index);
+
+
+ let classRestriction=!drag.classList.contains("path") 
+ &&!drag.classList.contains("instantPath") &&
+  !drag.classList.contains(movingClass) &&
+    !drag.classList.contains("FastStep")&&
+    !drag.classList.contains("instantStep")&&
+    !drag.classList.contains("SlowStep") &&
+     !drag.classList.contains("MediumStep");
+ if( !isRunning&& mouseClick && classRestriction && !mouseClickOnSpecial && Number(index)!=start  && Number(index)!=final){
+
+ if(!drag.classList.contains("block")){
+     walk[index]=-1;
+     BrickDetail[0]? wallSound.play():"";
+     drag.classList.add("block");
+ }else{
+     walk[index]=1;
+     drag.classList.remove("block")
+ }}
+
+ if(mouseClickOnSpecial && !drag.classList.contains("start") && !drag.classList.contains("final") && walk[index]!=-1){
+
+     if(movingClass=="start"){
+         shortFromStart[start]=Number.MAX_SAFE_INTEGER;
+         
+
+         start=Number(index);
+         shortFromStart[start]=0;
+         
+
+     }else{
+         final=Number(index);
+        
+     }
+     drag.classList.add(movingClass);
+     if(AlgoDoneOnBoard ){
+         clearBoard();
+         delay=0;
+
+         switch (document.querySelector("#Algorithms").value) {
+             case "BFS":
+                 BFS(vertices,start,final,walk,n,m,"instantStep",delay);
+                 break;
+             case "Dijkstra":
+                 Dijkstra(vertices,start,final,walk,n,m,"instantStep",delay);
+                 break;
+             case "DFS":
+                 DFS(vertices,start,final,walk,n,m,"instantStep",delay);
+                 break;
+             default:
+                 break;
+         }
+
+     }
+ }
+}
+
+
 for (let index = 0; index < Size; index++) {
 
    shortFromStart[index]=Number.MAX_SAFE_INTEGER; 
    visited[index]=0;
     vertices[index].addEventListener("mousedown",(e)=>{
+
         MouseCurrentlyIn=Number(e.target.id);
         mouseDownForWall(e)});
+
+
+    vertices[index].addEventListener("touchstart",(e)=>{
+        hoveringWall=true;
+        mouseClick=true;
+        e.preventDefault()
+        previous=e.currentTarget;
+        MouseCurrentlyIn=Number(e.target.id);
+        mouseDownForWall(e)});
+
+    vertices[index].addEventListener("touchend",(e)=>{
+        mouseClickOnSpecial=false
+       mouseClick=false
+       hoveringWall=false;
+    });
+
    prev[index]=0;
    walk[index]=1;
 
@@ -201,63 +381,29 @@ for (let index = 0; index < Size; index++) {
            }
     })
 
-   vertices[index].addEventListener("mouseenter",(drag)=>{
-       if(Number(drag.target.id)==MouseCurrentlyIn)
-       return;
+   vertices[index].addEventListener("mouseenter",(drag)=>{dragFun(drag.target,index)})
 
+   vertices[index].addEventListener("touchmove",(drag)=>{
 
-    MouseCurrentlyIn=Number(drag.target.id);
+   
 
+    const coordinates=drag.changedTouches[0];
 
-    let classRestriction=!drag.target.classList.contains("path") 
-    &&!drag.target.classList.contains("instantPath") &&
-     !drag.target.classList.contains(movingClass) &&
-       !drag.target.classList.contains("FastStep")&&
-       !drag.target.classList.contains("instantStep")&&
-       !drag.target.classList.contains("SlowStep") &&
-        !drag.target.classList.contains("MediumStep");
-    if( !isRunning&& mouseClick && classRestriction && !mouseClickOnSpecial&& Number(drag.target.id)!=start  && Number(drag.target.id)!=final){
+    let x=Math.floor((coordinates.clientX*1000))/1000;
+    let y=Math.floor((coordinates.clientY*1000))/1000;
+    let curr=document.elementFromPoint(x,y);
 
-    if(!drag.target.classList.contains("block")){
-        walk[index]=-1;
-        BrickDetail[0]? wallSound.play():"";
-        drag.target.classList.add("block");
-    }else{
-        walk[index]=1;
-        drag.target.classList.remove("block")
-    }}
+    if(curr.classList.contains("vertices") && hoveringWall){
+        
+    
+    
+    if(mouseClickOnSpecial && previous!==curr ){
+        previous.classList.remove(movingClass);
+       }
+    
+    hoveringWall?dragFun(curr,Number(curr.id)):0;
 
-    if(mouseClickOnSpecial && !drag.target.classList.contains("start") && !drag.target.classList.contains("final") && walk[index]!=-1){
-
-        if(movingClass=="start"){
-            shortFromStart[start]=Number.MAX_SAFE_INTEGER;
-            
-
-            start=Number(drag.target.id);
-            shortFromStart[start]=0;
-            
-
-        }else{
-            final=Number(drag.target.id);
-           
-        }
-        drag.target.classList.add(movingClass);
-        if(AlgoDoneOnBoard ){
-            clearBoard();
-            delay=0;
-
-            switch (document.querySelector("#Algorithms").value) {
-                case "BFS":
-                    BFS(vertices,start,final,walk,n,m,"instantStep",delay);
-                    break;
-                case "Dijkstra":
-                    Dijkstra(vertices,start,final,walk,n,m,"instantStep",delay);
-                    break;
-                default:
-                    break;
-            }
-
-        }
+    previous=curr;
     }
 }
 );
@@ -400,7 +546,7 @@ buttons[0].addEventListener("click",()=>{
                 isRunning=false;
                 buttons[0].disabled=false;
                 buttons[0].classList.remove("disabled")
-                buttons[o].classList.add(dict[theme.innerHTML].actionCol);
+                buttons[0].classList.add(dict[theme.innerHTML].actionCol);
                 run.currentTime=300;
                 
                 buttons[1].disabled=false;
@@ -444,6 +590,33 @@ buttons[0].addEventListener("click",()=>{
                 dots[i].style.backgroundColor="white";
             }
             break;
+        
+            case "DFS":
+            isRunning=true;
+            let DFSenable=DFS(vertices,start,final,walk,n,m,classOnStep,delay);
+            
+            setTimeout(() => {
+                isRunning=false;
+                buttons[0].disabled=false;
+                buttons[0].classList.remove("disabled")
+                buttons[0].classList.add(dict[theme.innerHTML].actionCol);
+                run.currentTime=300;
+                
+                buttons[1].disabled=false;
+                buttons[1].classList.remove("disabled")
+                race.style.display="none"
+            clearInterval(time);
+            }, DFSenable*delay);
+            setTimeout(() => {
+                run.pause();
+                backgroundSoundDetail[0]? backgroundSound.play():"";
+            }, DFSenable*delay+2000);
+            AlgoDoneOnBoard=true;
+            for (let i = 0; i < dots.length; i++) {
+                dots[i].style.animation="";
+                dots[i].style.backgroundColor="white"
+            }
+            break;
         default:
             break;
     }
@@ -485,7 +658,7 @@ const changeThemeMode=(mode)=>{
     document.querySelector("#runningMouse").setAttribute("src",dict[mode].mouseImg)
 
     document.querySelectorAll(".dot").forEach(e=>{e.style.backgroundColor=dict[mode].backCol});
-    document.querySelector("#canvas").style.backgroundColor=dict[mode].boardBackcol;
+    // document.querySelector("#canvas").style.backgroundColor=dict[mode].boardBackcol;
 
 }
 
@@ -495,109 +668,109 @@ theme.addEventListener("click",()=>{
 })
 
 
-// adding animation on hover on remaining part of the html socument than the board, header and the running part
-// Particle settings - Change these values to see what you can make this canvas do!
-let maxRadius = 100;
-let fadeOutOpacity = 0.005;
-let radiusIncrementMax = 0.9;
-let velocityIncrementMax = 1;
-let randRadiusMax = 20;
-let amtParticles = 1;
+// // adding animation on hover on remaining part of the html socument than the board, header and the running part
+// // Particle settings - Change these values to see what you can make this canvas do!
+// let maxRadius = 100;
+// let fadeOutOpacity = 0.005;
+// let radiusIncrementMax = 0.9;
+// let velocityIncrementMax = 1;
+// let randRadiusMax = 20;
+// let amtParticles = 1;
 
-const arcIncrement = 0.05;
+// const arcIncrement = 0.05;
 
 
 
-const img = new Image();
-img.src = 'https://www.johngreengo.com/wp-content/uploads/2021/12/JG-micro-round-RGB2-2000.png';
+// const img = new Image();
+// img.src = 'https://www.johngreengo.com/wp-content/uploads/2021/12/JG-micro-round-RGB2-2000.png';
 
-////////////////////////////////////////////////////////
+// ////////////////////////////////////////////////////////
 
-const canvas = document.querySelector('canvas');
-let mousePos = {
-    x: -500,
-    y: -500
-};
+// // const canvas = document.querySelector('canvas');
+// // let mousePos = {
+// //     x: -500,
+// //     y: -500
+// // };
 
-canvas.height = window.innerHeight;
-canvas.width = window.innerWidth;
+// // canvas.height = window.innerHeight;
+// // canvas.width = window.innerWidth;
 
-let ctx = canvas.getContext('2d');
+// // let ctx = canvas.getContext('2d');
 
-let particlesArray = [];
+// // let particlesArray = [];
 
-function Particle(x, y, radius) {
-    let posOrNeg = Math.random() + 0.1 > 0.5 ? '+' : '-';
-    let randNumX = `${posOrNeg}${Math.random() * velocityIncrementMax + 0.5}`;
-    let randNumY = `${posOrNeg}${Math.random() * velocityIncrementMax + 0.5}`;
-    let radiusIncrement = Math.random() * radiusIncrementMax;
+// // function Particle(x, y, radius) {
+// //     let posOrNeg = Math.random() + 0.1 > 0.5 ? '+' : '-';
+// //     let randNumX = `${posOrNeg}${Math.random() * velocityIncrementMax + 0.5}`;
+// //     let randNumY = `${posOrNeg}${Math.random() * velocityIncrementMax + 0.5}`;
+// //     let radiusIncrement = Math.random() * radiusIncrementMax;
 
-    this.radius = radius;
-    this.x = x;
-    this.y = y;
-    this.startAngle = 0;
-    this.endAngle = 2 * Math.PI;
-    this.arcVal = 0;
-    // this.antiClockwise = false;
-    this.antiClockwise = Math.random() > 0.5;
+// //     this.radius = radius;
+// //     this.x = x;
+// //     this.y = y;
+// //     this.startAngle = 0;
+// //     this.endAngle = 2 * Math.PI;
+// //     this.arcVal = 0;
+// //     // this.antiClockwise = false;
+// //     this.antiClockwise = Math.random() > 0.5;
 
-    this.opacity = 1;
+// //     this.opacity = 1;
 
-    this.rVal = Math.floor(Math.random() * 255) + 1;
-    this.gVal = Math.floor(Math.random() * 255) + 1;
-    this.bVal = Math.floor(Math.random() * 255) + 1;
+// //     this.rVal = Math.floor(Math.random() * 255) + 1;
+// //     this.gVal = Math.floor(Math.random() * 255) + 1;
+// //     this.bVal = Math.floor(Math.random() * 255) + 1;
   
-    // this.rVal = 72;
-    // this.gVal = 158;
-    // this.bVal = 68;
+// //     // this.rVal = 72;
+// //     // this.gVal = 158;
+// //     // this.bVal = 68;
 
-    this.xVel = parseInt(randNumX);
-    this.yVel = parseInt(randNumY);
+// //     this.xVel = parseInt(randNumX);
+// //     this.yVel = parseInt(randNumY);
 
-    this.draw = () => {
-        this.opacity -= fadeOutOpacity;
-        this.x += this.xVel;
-        this.y += this.yVel;
-        this.radius += radiusIncrement;
-        const maxRad = 2 * Math.PI;
-        const currentRad = arcIncrement * Math.PI;
-        this.arcVal += currentRad > maxRad ? maxRad : currentRad;
+// //     this.draw = () => {
+// //         this.opacity -= fadeOutOpacity;
+// //         this.x += this.xVel;
+// //         this.y += this.yVel;
+// //         this.radius += radiusIncrement;
+// //         const maxRad = 2 * Math.PI;
+// //         const currentRad = arcIncrement * Math.PI;
+// //         this.arcVal += currentRad > maxRad ? maxRad : currentRad;
 
-        if (this.radius <= 0) this.radius = 0.01;
+// //         if (this.radius <= 0) this.radius = 0.01;
       
-        // ctx.drawImage(img, this.x, this.y, this.radius, this.radius);
+// //         // ctx.drawImage(img, this.x, this.y, this.radius, this.radius);
       
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.radius, this.startAngle, this.arcVal, this.antiClockwise);
-        ctx.strokeStyle = `rgba(${this.rVal}, ${this.gVal}, ${this.bVal}, ${this.opacity})`;
-        ctx.stroke();
+// //         ctx.beginPath();
+// //         ctx.arc(this.x, this.y, this.radius, this.startAngle, this.arcVal, this.antiClockwise);
+// //         ctx.strokeStyle = `rgba(${this.rVal}, ${this.gVal}, ${this.bVal}, ${this.opacity})`;
+// //         ctx.stroke();
 
-        if (this.opacity <= 0) {
-            let index = particlesArray.indexOf(this);
-            particlesArray.splice(index, 1);
-        }
-    }
+// //         if (this.opacity <= 0) {
+// //             let index = particlesArray.indexOf(this);
+// //             particlesArray.splice(index, 1);
+// //         }
+// //     }
 
-}
+// // }
 
-canvas.addEventListener('mousemove', e => {
-    mousePos = {
-        x: e.clientX,
-        y: e.clientY
-    };
+// // canvas.addEventListener('mousemove', e => {
+// //     mousePos = {
+// //         x: e.clientX,
+// //         y: e.clientY
+// //     };
 
-    for (let i = 0; i < amtParticles; i++) {
-        let randRadius = Math.floor(Math.random() * randRadiusMax);
-        particlesArray.push(new Particle(mousePos.x, mousePos.y, randRadius));
-    }
-});
+// //     for (let i = 0; i < amtParticles; i++) {
+// //         let randRadius = Math.floor(Math.random() * randRadiusMax);
+// //         particlesArray.push(new Particle(mousePos.x, mousePos.y, randRadius));
+// //     }
+// // });
 
 
-function animate() {
-    ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
-    particlesArray.forEach(particle => particle.draw());
-    requestAnimationFrame(animate);
+// // function animate() {
+// //     ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+// //     particlesArray.forEach(particle => particle.draw());
+// //     requestAnimationFrame(animate);
 
-}
+// // }
 
-animate();
+// // animate();

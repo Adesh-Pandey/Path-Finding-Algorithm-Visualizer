@@ -96,7 +96,7 @@ const BFS=(vertices,start,final,walk,n,m,classOnStep,delay)=>{
     }
 
 
-    return i;
+    return i+findDistance(final,0)+1;
 
 }
 

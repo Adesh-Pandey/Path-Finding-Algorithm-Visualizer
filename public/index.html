@@ -3,27 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=0.4">
     <link rel="stylesheet" href="./index.css">
+    <link rel="icon" type="image/x-icon" href="/public/images/LabRAT.jpg">
     <title>Dijkstra's Algorithm</title>
 
 </head>
 <body>
-    <canvas id="canvas" height="714" width="1536">
-            
-    </canvas>
+  
     <header class="header">
         <div class="sound">
             <span class="settings-audio">Audio Settings</span>
-
+            <span><input class="audioOrNot" type="checkbox" checked="">
     <select name="audioList" id="audiolist">
         <option value="Background"> Background Sound</option>
         <option value="Running"> Running Music Sound</option>
         <option value="Reset"> Reset Sound</option>
         <option value="Brick"> Brick Sound</option>
         <option value="Special"> Special Nodes Sound</option>
-    </select>
-    <span><input class="audioOrNot" type="checkbox" checked=""> Audio ?</span>
+    </select></span>
+    <span><input class="anyAudioOrNot" type="checkbox" checked=""> Any Audio ?</span>
 </div>
     <span class="vol-span">
     <span class="volume-title">Volume</span>
@@ -69,15 +68,66 @@
       <span class="stateDefiners">
         <button class="action"> Start</button>
         <button class="action"> Reset</button>
+        
       </span>
       <span class="lightDarkToggle">LIGHT</span>
     
     </header>
+
+
+
+
+
+
+
+
+
+
+<!-- <header class="smallHeader" >
+    <div class="name">
+        <div>Path Finding Algorithm Visual</div>
+        <div>Settings</div>
+    </div>
+       
+    <div class="basicInteraction">
+        
+  <div>
+    <select name="Algorithms" id="Algorithms"> 
+
+<option value="Dijkstra"> Dijkstra's Algorithm</option>
+<option value="BFS"> Breadth For Search</option>
+<option value="DFS"> Depth For Search</option>
+
+
+    </select>
+</div>
+    
+      <div class="stateDefiners">
+        <button class="action"> Start</button>
+        <button class="action"> Reset</button>
+      </div>
+      <div class="lightDarkToggle">LIGHT</div>
+
+    </div>
+    
+    </header> -->
+
+
+
+
+
+
+
+
+
+
+
     <div class="collection">
         
     <table class="board">
+        
     </table>
-
+    <!-- <button  class="hoverWall">start hover walls</button> -->
 </div>
    
 

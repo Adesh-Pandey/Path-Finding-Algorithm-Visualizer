@@ -1,10 +1,15 @@
+html{
+  user-select: none;
+  min-width:  920px;
+}
 .board {
     display: grid;
     width: fit-content;
+    /* min-width: 920px; */
     /* margin: 3rem 0 0 3rem; */
     margin: auto;
-    grid-template-columns: repeat(35, 1.65rem);
-    grid-template-rows: repeat(15, 1.65rem);
+    grid-template-columns: repeat(20, 2.5rem);
+    grid-template-rows: repeat(23, 2.5rem);
     margin-top: 3rem;
   }
   .disabled {
@@ -29,6 +34,13 @@
     width: 10rem;
   }
   
+  .hoverWall{
+    position: absolute;
+    left: 50%;
+    padding: 10px 5px;
+    font-size: larger;
+  }
+
   
   @keyframes BlinkDARK {
     0% {
@@ -98,6 +110,13 @@
     }
   }
   
+  .movingPath{
+    background-image: url('https://rb.gy/p6kx0l');
+    background-repeat: no-repeat;
+    background-size: contain;
+    
+  }
+
   .path {
     background-color: rgba(0, 190, 218, 0.75);
     animation: pathColor 1s forwards;
@@ -105,17 +124,22 @@
   
   @keyframes pathColor {
     0% {
+
+
       transform: scale(0.2);
     }
-  
+
     75% {
       transform: scale(1.2);
+      
     }
   
     100% {
+
       transform: scale(1);
       background-color: rgba(253, 253, 0, 0.877);
       border: none;
+      
     }
   }
   .settings-audio{
@@ -126,6 +150,7 @@
   }
   
   .vertices {
+    user-select: none;
     border: 1px solid rgb(175, 216, 248);
     /* border: 1px solid rgba(212, 255, 208, 0.507); */
     /* background-color: white; */
@@ -175,13 +200,15 @@
     border: none;
   }
   
+  @media (hover: hover){
   .action:hover{
     background-color: white;
     color: black;
-  }
+  }}
   
   .algo{
     display: grid;
+    justify-items: center;
   }
   .action{
     height: 2rem;
@@ -268,11 +295,13 @@
   
   .header{
     display: flex;
+    /* overflow: hidden; */
     justify-content: space-evenly;
     padding-top: 1.6rem;
     padding-bottom: 0.6rem;
     background-color: #004674e6;
     padding-left: 0.1rem;
+    min-width: 920px
   }
   
   @keyframes sizeAlter {
@@ -290,7 +319,7 @@
     border: none;
   
     animation: sizeAlter 0.5s forwards;
-  
+    background-size: contain;
     /* -webkit-user-select: none; 
     -moz-user-select: none; 
     -ms-user-select: none; 
@@ -327,7 +356,9 @@
     background-repeat: no-repeat;
     animation: sizeAlter 0.5s forwards;
     border: none;
+    background-size: contain;
   }
+
   
   /* 
   0% {
@@ -352,7 +383,7 @@
   
   
   .lightDarkToggle{
-  
+    margin-top: 2.6rem;
     color: white;
     height: 2rem;
     cursor: pointer;
@@ -365,4 +396,46 @@
     z-index: -1;
     
     
+  }
+
+
+/* @media only screen and (max-width:520px){
+
+.stateDefiners{
+  margin-top: 0;
+}
+  #audiolist, #Algorithms, #Speed {
+    height: 0.6rem;
+    margin: 0.2rem 0;
+    padding: 0.1rem 0.11rem;
+    border-radius: 20px;
+    background-color: #dafffb;
+    width: 9rem;
+}
+.lightDarkToggle{
+  color: black;
+
+  font-size: small;
+  padding-left: 5px;
+  padding-top: 5px;
+  height: 1.7rem;
+
+  }
+
+} */
+
+
+
+@media only screen and (max-device-width: 900px) {
+  html{
+    
+    height: 160vh;
+  }
+
+}
+
+@media only screen and (max-device-width: 400px) {
+  html{
+    height: 220vh;
+  }
   }
